@@ -65,7 +65,6 @@ var poss_x_old = 0;
 var poss_y_old = 0;
 
 var game_loaded = 0;
-var game_started = 0;
 var sound_total = 0;
 
 window.onload = function() 
@@ -79,10 +78,7 @@ window.onload = function()
 	background.fillStyle = "white";
 	
 	mc = new Hammer(first_layer);
-	
 	first_layer.imageSmoothingEnabled = false;
-	
-	game_mode = 0;
 	
 	for (i=0;i<21;i++)
 	{
@@ -129,46 +125,41 @@ window.onload = function()
 
 	logo_y = -90;
 	titlescreen_state = 0;
-	game_mode = 0;
+	
+	// Game assets loading screen
+	game_mode = 5;
 	
 	(function (window) 
 	{
 		function mainloop() 
 		{
 			touch();
-			if (game_loaded < 12)
+			switch(game_mode)
 			{
-				// Render blackground while still loading
-				background.drawImage(img_memory[11], 0, 0);
-				background.fillText("Downloading game assets, please wait", 10, 520);
-			}
-			else
-			{
-				if (game_started == 0)
-				{
-					game_started = 1;
-					Init_Game_state(0);
-				}
-				
-				switch(game_mode)
-				{
-					case 0:
-						Titlescreen();
-					break;
-					case 1:
-						Story();
-					break;
-					case 2:
-						Game_fuck();
-					break;
-					case 3:
-						End();
-					break;
-					case 4:
-						GameOver();
-					break;
-					
-				}
+				case 0:
+					Titlescreen();
+				break;
+				case 1:
+					Story();
+				break;
+				case 2:
+					Game_fuck();
+				break;
+				case 3:
+					End();
+				break;
+				case 4:
+					GameOver();
+				break;
+				case 5:
+					// Render blackground while still loading
+					background.drawImage(img_memory[11], 0, 0);
+					background.fillText("Downloading game assets, please wait", 10, 520);
+					if (game_loaded > 11)
+					{
+						Init_Game_state(0);
+					}
+				break;
 			}
 			tapped = 0;
 	    }
