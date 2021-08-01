@@ -84,18 +84,18 @@ window.onload = function()
 		img_memory[i] = new Image();
 	}
 
-	sound[0] = new Howl({ src: ['data/title.webm', 'data/title.ogg', 'data/title.mp3'], loop: true, preload: true });
-	sound[1] = new Howl({ src: ['data/ya.webm', 'data/ya.ogg', 'data/ya.mp3'], preload: true });
-	sound[2] = new Howl({ src: ['data/ya2.webm', 'data/ya2.ogg', 'data/ya2.mp3'], preload: true });
-	sound[3] = new Howl({ src: ['data/ya3.webm', 'data/ya3.ogg', 'data/ya3.mp3'], preload: true });
-	sound[4] = new Howl({ src: ['data/ya4.webm', 'data/ya4.ogg', 'data/ya4.mp3'], preload: true });
-	sound[5] = new Howl({ src: ['data/loading.webm', 'data/loading.ogg', 'data/loading.mp3'], loop: true, preload: true });
-	sound[6] = new Howl({ src: ['data/ending.webm', 'data/ending.ogg', 'data/ending.mp3'], loop: true, preload: true });
-	sound[7] = new Howl({ src: ['data/game.webm', 'data/game.ogg', 'data/game.mp3'], loop: true, preload: true });
-	sound[8] = new Howl({ src: ['data/gameover.webm', 'data/gameover.ogg', 'data/gameover.mp3'], loop: true, preload: true });
-	sound[9] = new Howl({ src: ['data/scary.webm', 'data/scary.ogg', 'data/scary.mp3'], preload: true });
-	sound[10] = new Howl({ src: ['data/fuck.webm', 'data/fuck.ogg', 'data/fuck.mp3'], preload: true });
-	sound[11] = new Howl({ src: ['data/fuck2.webm', 'data/fuck2.ogg', 'data/fuck2.mp3'], preload: true });
+	sound[0] = new Howl({ src: ['data/title.webm', 'data/title.ogg', 'data/title.mp3'], loop: true});
+	sound[1] = new Howl({ src: ['data/ya.webm', 'data/ya.ogg', 'data/ya.mp3'] });
+	sound[2] = new Howl({ src: ['data/ya2.webm', 'data/ya2.ogg', 'data/ya2.mp3'] });
+	sound[3] = new Howl({ src: ['data/ya3.webm', 'data/ya3.ogg', 'data/ya3.mp3'] });
+	sound[4] = new Howl({ src: ['data/ya4.webm', 'data/ya4.ogg', 'data/ya4.mp3'] });
+	sound[5] = new Howl({ src: ['data/loading.webm', 'data/loading.ogg', 'data/loading.mp3'], loop: true});
+	sound[6] = new Howl({ src: ['data/ending.webm', 'data/ending.ogg', 'data/ending.mp3'], loop: true });
+	sound[7] = new Howl({ src: ['data/game.webm', 'data/game.ogg', 'data/game.mp3'], loop: true });
+	sound[8] = new Howl({ src: ['data/gameover.webm', 'data/gameover.ogg', 'data/gameover.mp3'], loop: true });
+	sound[9] = new Howl({ src: ['data/scary.webm', 'data/scary.ogg', 'data/scary.mp3'] });
+	sound[10] = new Howl({ src: ['data/fuck.webm', 'data/fuck.ogg', 'data/fuck.mp3']});
+	sound[11] = new Howl({ src: ['data/fuck2.webm', 'data/fuck2.ogg', 'data/fuck2.mp3'] });
 	Init_Game_state(0);
 	
 	img_memory[0].src = 'data/titlescreen.jpg';
@@ -199,6 +199,7 @@ function Init_Game_state(b)
 			titlescreen_scale = 2;	
 			transition_black = 1
 			titlescreen_state = 0;
+			animation_titlescreen = 0;
 			sound[0].play();
 		break;
 		case 1:
