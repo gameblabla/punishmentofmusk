@@ -1,0 +1,20 @@
+{
+  "version": "1.00",
+  "name": "The rape of Orban",
+  "launch_path": "/index.html",
+  "description": "The Punishment of Orban",
+  "icons": {
+    "128": "/128.png"
+  },
+  "developer": {
+    "name": "Gameblabla",
+    "url": ""
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "orientation": [ "landscape" ],
+  "default_locale": "en",
+  "fullscreen": "true",
+  "permissions": {}
+}
