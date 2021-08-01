@@ -64,8 +64,13 @@ var touch_state_time = 0;
 var poss_x_old = 0;
 var poss_y_old = 0;
 
+var game_loaded = 0;
+var game_started = 0;
+var sound_total = 0;
+
 window.onload = function() 
 {
+	var mc;
 	var i;
 	first_layer = document.getElementById('canvas');
 	background = first_layer.getContext('2d'); // A layer for the background
@@ -84,19 +89,18 @@ window.onload = function()
 		img_memory[i] = new Image();
 	}
 
-	sound[0] = new Howl({ src: ['data/title.webm', 'data/title.ogg', 'data/title.mp3'], loop: true});
-	sound[1] = new Howl({ src: ['data/ya.webm', 'data/ya.ogg', 'data/ya.mp3'] });
-	sound[2] = new Howl({ src: ['data/ya2.webm', 'data/ya2.ogg', 'data/ya2.mp3'] });
-	sound[3] = new Howl({ src: ['data/ya3.webm', 'data/ya3.ogg', 'data/ya3.mp3'] });
-	sound[4] = new Howl({ src: ['data/ya4.webm', 'data/ya4.ogg', 'data/ya4.mp3'] });
-	sound[5] = new Howl({ src: ['data/loading.webm', 'data/loading.ogg', 'data/loading.mp3'], loop: true});
-	sound[6] = new Howl({ src: ['data/ending.webm', 'data/ending.ogg', 'data/ending.mp3'], loop: true });
-	sound[7] = new Howl({ src: ['data/game.webm', 'data/game.ogg', 'data/game.mp3'], loop: true });
-	sound[8] = new Howl({ src: ['data/gameover.webm', 'data/gameover.ogg', 'data/gameover.mp3'], loop: true });
-	sound[9] = new Howl({ src: ['data/scary.webm', 'data/scary.ogg', 'data/scary.mp3'] });
-	sound[10] = new Howl({ src: ['data/fuck.webm', 'data/fuck.ogg', 'data/fuck.mp3']});
-	sound[11] = new Howl({ src: ['data/fuck2.webm', 'data/fuck2.ogg', 'data/fuck2.mp3'] });
-	Init_Game_state(0);
+	sound[0] = new Howl({ src: ['data/title.webm', 'data/title.ogg', 'data/title.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[1] = new Howl({ src: ['data/ya.webm', 'data/ya.ogg', 'data/ya.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[2] = new Howl({ src: ['data/ya2.webm', 'data/ya2.ogg', 'data/ya2.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[3] = new Howl({ src: ['data/ya3.webm', 'data/ya3.ogg', 'data/ya3.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[4] = new Howl({ src: ['data/ya4.webm', 'data/ya4.ogg', 'data/ya4.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[5] = new Howl({ src: ['data/loading.webm', 'data/loading.ogg', 'data/loading.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[6] = new Howl({ src: ['data/ending.webm', 'data/ending.ogg', 'data/ending.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[7] = new Howl({ src: ['data/game.webm', 'data/game.ogg', 'data/game.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}, });
+	sound[8] = new Howl({ src: ['data/gameover.webm', 'data/gameover.ogg', 'data/gameover.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[9] = new Howl({ src: ['data/scary.webm', 'data/scary.ogg', 'data/scary.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[10] = new Howl({ src: ['data/fuck.webm', 'data/fuck.ogg', 'data/fuck.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[11] = new Howl({ src: ['data/fuck2.webm', 'data/fuck2.ogg', 'data/fuck2.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
 	
 	img_memory[0].src = 'data/titlescreen.jpg';
 	//img_memory[1].src = 'data/time.jpg';
@@ -127,30 +131,44 @@ window.onload = function()
 	titlescreen_state = 0;
 	game_mode = 0;
 	
-
 	(function (window) 
 	{
 		function mainloop() 
 		{
 			touch();
-			switch(game_mode)
+			if (game_loaded < 12)
 			{
-				case 0:
-					Titlescreen();
-				break;
-				case 1:
-					Story();
-				break;
-				case 2:
-					Game_fuck();
-				break;
-				case 3:
-					End();
-				break;
-				case 4:
-					GameOver();
-				break;
+				// Render blackground while still loading
+				background.drawImage(img_memory[11], 0, 0);
+				background.fillText("Downloading game assets, please wait", 10, 520);
+			}
+			else
+			{
+				if (game_started == 0)
+				{
+					game_started = 1;
+					Init_Game_state(0);
+				}
 				
+				switch(game_mode)
+				{
+					case 0:
+						Titlescreen();
+					break;
+					case 1:
+						Story();
+					break;
+					case 2:
+						Game_fuck();
+					break;
+					case 3:
+						End();
+					break;
+					case 4:
+						GameOver();
+					break;
+					
+				}
 			}
 			tapped = 0;
 	    }
@@ -159,6 +177,7 @@ window.onload = function()
 		
 	} (window));
 	
+	/* | 0 is used for rounding numbers */
 	mc.on("tap", function(e) 
 	{
 		var currX, currY;
@@ -191,26 +210,26 @@ function Init_Game_state(b)
 	switch(b)
 	{
 		case 0:
-			titlescreen_logo0x = -959
-			titlescreen_logo1_x = -350
-			titlescreen_logo2_x = 850
+			titlescreen_logo0x = -959;
+			titlescreen_logo1_x = -350;
+			titlescreen_logo2_x = 850;
 			timer_game = 0;
 			timer_game2 = 0;
 			titlescreen_scale = 2;	
-			transition_black = 1
+			transition_black = 1;
 			titlescreen_state = 0;
 			animation_titlescreen = 0;
 			sound[0].play();
 		break;
 		case 1:
-			transition_black = 1
+			transition_black = 1;
 			timer_game = 0;
 			timer_game2 = 0;
 			story_state = 0;
 			sound[5].play();
 		break;
 		case 2:
-			transition_black = 1
+			transition_black = 1;
 			timer_game = 0;
 			timer_game2 = 0;
 			fuck_state = 0;
@@ -234,7 +253,7 @@ function Init_Game_state(b)
 			sound[6].play();
 		break;
 		case 4:
-			transition_black = 1
+			transition_black = 1;
 			timer_game = 0;
 			timer_game2 = 0;
 			fuck_state = 0;
@@ -321,45 +340,45 @@ function Titlescreen()
 			if (titlescreen_logo0x > -1)
 			{
 				titlescreen_logo0x = 0;
-				titlescreen_scale = titlescreen_scale - 0.08
+				titlescreen_scale = titlescreen_scale - 0.08;
 			}
 			else
 			{
-				titlescreen_logo0x += 12
+				titlescreen_logo0x += 12;
 			}
 			
-			Put_animated_background(0, titlescreen_logo0x, 0, 960, 540, 0, titlescreen_scale)
+			Put_animated_background(0, titlescreen_logo0x, 0, 960, 540, 0, titlescreen_scale);
 			if (transition_black > 0.05)
 			{
 				transition_black = transition_black - 0.05;
-				background.globalAlpha = transition_black
-				Put_animated_background(11, 0, 0, 960, 540, 0, 1)
-				background.globalAlpha = 1.0	
+				background.globalAlpha = transition_black;
+				Put_animated_background(11, 0, 0, 960, 540, 0, 1);
+				background.globalAlpha = 1.0;
 			}
 
 			if (titlescreen_scale < 1.09)
 			{
-				titlescreen_state = 1
-				timer_game = 0
-				transition_black = 0
+				titlescreen_state = 1;
+				timer_game = 0;
+				transition_black = 0;
 			}
 		break;
 		case 1:	
-			Put_animated_background(0, 0, 0, 960, 540, animation_titlescreen, 1)
+			Put_animated_background(0, 0, 0, 960, 540, animation_titlescreen, 1);
 			
 			if (timer_game < 19)
 			{
-				timer_game += 1
+				timer_game += 1;
 			}
 			
 			if (timer_game > 18)
 			{
-				timer_game2++
+				timer_game2++;
 				
 				if (timer_game2 > 3 && animation_titlescreen < 9) 
 				{
-					timer_game2 = 0
-					animation_titlescreen = animation_titlescreen + 1
+					timer_game2 = 0;
+					animation_titlescreen = animation_titlescreen + 1;
 				}
 			}
 			
@@ -369,17 +388,17 @@ function Titlescreen()
 			}
 		break;
 		case 2:
-			Put_animated_background(0, 0, 0, 960, 540, 9, 1)
+			Put_animated_background(0, 0, 0, 960, 540, 9, 1);
 			background.drawImage(img_memory[10], titlescreen_logo1_x,30);
 			background.drawImage(img_memory[3], 200, titlescreen_logo2_x);
 			
-			if (titlescreen_logo1_x < 20) titlescreen_logo1_x = titlescreen_logo1_x + 10
+			if (titlescreen_logo1_x < 20) titlescreen_logo1_x = titlescreen_logo1_x + 10;
 			
-			if (titlescreen_logo2_x > 440) titlescreen_logo2_x = titlescreen_logo2_x - 5
-			else titlescreen_state = 3
+			if (titlescreen_logo2_x > 440) titlescreen_logo2_x = titlescreen_logo2_x - 5;
+			else titlescreen_state = 3;
 		break;
 		case 3:
-			Put_animated_background(0, 0, 0, 960, 540, 9, 1)
+			Put_animated_background(0, 0, 0, 960, 540, 9, 1);
 			background.drawImage(img_memory[10], titlescreen_logo1_x,30);
 			background.drawImage(img_memory[3], 200, titlescreen_logo2_x);
 			
@@ -389,15 +408,15 @@ function Titlescreen()
 			}
 		break;
 		case 4:
-			Put_animated_background(0, 0, 0, 960, 540, 9, 1)
-			background.globalAlpha = transition_black
-			Put_animated_background(11, 0, 0, 960, 540, 0, 1)
-			background.globalAlpha = 1.0
+			Put_animated_background(0, 0, 0, 960, 540, 9, 1);
+			background.globalAlpha = transition_black;
+			Put_animated_background(11, 0, 0, 960, 540, 0, 1);
+			background.globalAlpha = 1.0;
 			
-			transition_black = transition_black + 0.04
+			transition_black = transition_black + 0.04;
 			if (transition_black > 1.1)
 			{
-				transition_black = 1
+				transition_black = 1;
 				titlescreen_state = 5;
 			}
 		break;
@@ -470,7 +489,7 @@ function Story()
 			background.fillText("And he will fucking rape him.", 300, 240);
 		break;
 		case 12:
-			Init_Game_state(2)
+			Init_Game_state(2);
 		break;
 	}
 	
@@ -479,28 +498,28 @@ function Story()
 			
 	if (timer_game < 10)
 	{
-		timer_game += 1
+		timer_game += 1;
 	}
 		
 	if (touch_state == 1)
 	{
 		if (poss_x > 820 && poss_y < 70)
 		{
-			story_state = 12
+			story_state = 12;
 		}
 		else
 		{
 			story_state = story_state + 1;
 		}
-		timer_game = 0
+		timer_game = 0;
 	}	
 	
 	if (transition_black > 0.05)
 	{
 		transition_black = transition_black - 0.05;
-		background.globalAlpha = transition_black
-		Put_animated_background(11, 0, 0, 960, 540, 0, 1)
-		background.globalAlpha = 1.0	
+		background.globalAlpha = transition_black;
+		Put_animated_background(11, 0, 0, 960, 540, 0, 1);
+		background.globalAlpha = 1.0;
 	}
 }
 
@@ -516,9 +535,9 @@ function Game_fuck()
 			if (transition_black > 0.05)
 			{
 				transition_black = transition_black - 0.05;
-				background.globalAlpha = transition_black
-				Put_animated_background(11, 0, 0, 960, 540, 0, 1)
-				background.globalAlpha = 1.0	
+				background.globalAlpha = transition_black;
+				Put_animated_background(11, 0, 0, 960, 540, 0, 1);
+				background.globalAlpha = 1.0;
 			}
 			
 			timer_game++;
@@ -645,7 +664,7 @@ function Game_fuck()
 			timer_game++;
 			if (timer_game > 60)
 			{
-				transition_black = 1
+				transition_black = 1;
 				timer_game = 0;
 				timer_game2 = 0;
 				fuck_state = 3;
@@ -666,9 +685,9 @@ function Game_fuck()
 			if (transition_black > 0.05)
 			{
 				transition_black = transition_black - 0.05;
-				background.globalAlpha = transition_black
-				Put_animated_background(11, 0, 0, 960, 540, 0, 1)
-				background.globalAlpha = 1.0	
+				background.globalAlpha = transition_black;
+				Put_animated_background(11, 0, 0, 960, 540, 0, 1);
+				background.globalAlpha = 1.0;
 			}
 			
 			timer_game++;
@@ -848,15 +867,15 @@ function GameOver()
 	if (touch_state == 1)
 	{
 		Init_Game_state(2);
-		timer_game = 0
+		timer_game = 0;
 	}	
 	
 	if (transition_black > 0.04)
 	{
 		transition_black = transition_black - 0.04;
-		background.globalAlpha = transition_black
-		Put_animated_background(11, 0, 0, 960, 540, 0, 1)
-		background.globalAlpha = 1.0	
+		background.globalAlpha = transition_black;
+		Put_animated_background(11, 0, 0, 960, 540, 0, 1);
+		background.globalAlpha = 1.0;
 	}
 }
 
@@ -918,21 +937,21 @@ function End()
 
 	if (timer_game < 10)
 	{
-		timer_game += 1
+		timer_game += 1;
 	}
 		
 	if (touch_state == 1)
 	{
 		story_state = story_state + 1;
-		timer_game = 0
+		timer_game = 0;
 	}	
 	
 	if (transition_black > 0.05)
 	{
 		transition_black = transition_black - 0.05;
-		background.globalAlpha = transition_black
-		Put_animated_background(11, 0, 0, 960, 540, 0, 1)
-		background.globalAlpha = 1.0	
+		background.globalAlpha = transition_black;
+		Put_animated_background(11, 0, 0, 960, 540, 0, 1);
+		background.globalAlpha = 1.0;
 	}
 }
 
