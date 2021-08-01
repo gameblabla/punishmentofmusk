@@ -89,18 +89,18 @@ window.onload = function()
 		img_memory[i] = new Image();
 	}
 
-	sound[0] = new Howl({ src: ['data/title.webm', 'data/title.ogg', 'data/title.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[1] = new Howl({ src: ['data/ya.webm', 'data/ya.ogg', 'data/ya.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[2] = new Howl({ src: ['data/ya2.webm', 'data/ya2.ogg', 'data/ya2.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[3] = new Howl({ src: ['data/ya3.webm', 'data/ya3.ogg', 'data/ya3.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[4] = new Howl({ src: ['data/ya4.webm', 'data/ya4.ogg', 'data/ya4.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[5] = new Howl({ src: ['data/loading.webm', 'data/loading.ogg', 'data/loading.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[6] = new Howl({ src: ['data/ending.webm', 'data/ending.ogg', 'data/ending.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[7] = new Howl({ src: ['data/game.webm', 'data/game.ogg', 'data/game.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}, });
-	sound[8] = new Howl({ src: ['data/gameover.webm', 'data/gameover.ogg', 'data/gameover.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[9] = new Howl({ src: ['data/scary.webm', 'data/scary.ogg', 'data/scary.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[0] = new Howl({ src: ['data/title.webm', 'data/title.ogg', 'data/title.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[1] = new Howl({ src: ['data/ya.webm', 'data/ya.ogg', 'data/ya.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[2] = new Howl({ src: ['data/ya2.webm', 'data/ya2.ogg', 'data/ya2.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[3] = new Howl({ src: ['data/ya3.webm', 'data/ya3.ogg', 'data/ya3.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[4] = new Howl({ src: ['data/ya4.webm', 'data/ya4.ogg', 'data/ya4.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[5] = new Howl({ src: ['data/loading.webm', 'data/loading.ogg', 'data/loading.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[6] = new Howl({ src: ['data/ending.webm', 'data/ending.ogg', 'data/ending.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[7] = new Howl({ src: ['data/game.webm', 'data/game.ogg', 'data/game.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;} });
+	sound[8] = new Howl({ src: ['data/gameover.webm', 'data/gameover.ogg', 'data/gameover.mp3'], loop: true, onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[9] = new Howl({ src: ['data/scary.webm', 'data/scary.ogg', 'data/scary.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
 	sound[10] = new Howl({ src: ['data/fuck.webm', 'data/fuck.ogg', 'data/fuck.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
-	sound[11] = new Howl({ src: ['data/fuck2.webm', 'data/fuck2.ogg', 'data/fuck2.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
+	sound[11] = new Howl({ src: ['data/fuck2.webm', 'data/fuck2.ogg', 'data/fuck2.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
 	
 	img_memory[0].src = 'data/titlescreen.jpg';
 	//img_memory[1].src = 'data/time.jpg';
