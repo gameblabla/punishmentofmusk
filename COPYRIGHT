@@ -1,0 +1,89 @@
+GAMEBLABLA's VIDEO GAME PUBLIC LICENSE
+Version 1.0,  September 19rd 2016
+
+Copyright (C) 2016 Gameblabla <https://gameblabla.nl>
+
+Everyone is permitted to copy and distribute verbatim or modified
+copies of This license document, and changing it is allowed as long
+as the name is changed.
+
+TERMS AND CONDITIONS
+
+The licensor grants you the rights to modify, redistribute, use and make Derivative works of the Program,
+in its entirety or in parts, provided that you comply to the terms and conditions as defined below. 
+The licensor shall also comply to the following terms and conditions as well.
+
+Section 1 - Definitions
+
+"License" are terms and conditions for use, reproduction and distribution as defined by this document.
+
+"This license" refers to this document.
+
+"Licensor" is the copyright owner or entity authorized by the copyright owner that is granting the License.
+
+"You" are the licensees. Licensees may be individuals or organizations.
+
+"They" refers to the Licensor and/or the licensees.
+
+"Program" refers to any copyrightable work licensed under This license.
+
+"Software" is any set of machine-readable instructions that directs a computer's processor to perform specific operations.
+
+"Source code" is the human readable form of the Program and is the preferred form of the work for making modifications to it.
+
+"Deploy" is the redistribution of copies to the public.
+
+"Trademark" is a distinctive design, graphics, logo, symbols, words, or any combination thereof that uniquely identifies a firm and/or its goods or services, and gives it owner the legal rights to prevent the Trademark's unauthorized use.
+
+"Patent" is a government license that gives the holder exclusive rights to a process, design or new invention for a designated period of time.
+
+"Pantented" is a work covered by a patent.
+
+"Derivative work" is a Software that includes copyright-protected elements of the Program.
+
+Section 2 - Conditions
+
+a) The copyright notice of the Program shall be preserved.
+b) The Program and Derivative works shall not be Patented in any way.
+c) If you make any modifications to the Source code, you shall automatically grant all the rights to all your Patents to the Licensor and the licensees.
+d) The licensees may not engage in litigations in any way against the Licensor and/or the licensees because they infringed on Trademarks and/or Patents.
+e) The source code for the Program and Derivative works shall be Deployed except for private use.
+f) The name of the Licensor may not be used to endorse or promote products derived from this Program without specific prior written permission.
+g) The Licensor and licensees shall not prevent the redistribution of the Program and/or Derivate works if they have not infringed on This license.
+
+Section 3 - Warranty
+
+THE PROGRAM IS PROVIDED "AS IS" AND THE LICENSOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS PROGRAM INCLUDING 
+ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. 
+IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS PROGRAM.
+
+Section 4 - Termination
+
+The rights, Trademarks and Patents granted to you under this licence shall terminate automatically upon any breach by you of the terms of this licence.
+
+Section 5 - Interpretation
+
+To the extent possible, if any provision of This license is deemed unenforceable, it shall be automatically reformed to the minimum extent necessary to make it enforceable. 
+If the provision cannot be reformed, it shall be severed from This license without affecting the enforceability of the remaining terms and conditions.
+
+
+END OF TERMS AND CONDITIONS
+
+
+How to apply this license to your works ?
+
+Attach the following notice to the source code of your Program and put the GAMEBLABLA's VIDEO GAME PUBLIC LICENSE in a file called COPYING. 
+(without any extensions)
+
+/*
+Copyright (C) <year>  <name of author>
+Licensed under the GAMEBLABLA's VIDEO GAME PUBLIC LICENSE version 1.0.
+See COPYING file for more details.
+If a COPYING file was not provided, you can ask the copyright holder for a copy at :
+<gameblabla@openmailbox.org>
+	
+This Program is distributed without WITHOUT ANY WARRANTY; 
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+See the GAMEBLABLA's VIDEO GAME PUBLIC LICENSE for more details.
+*/
