@@ -32,7 +32,7 @@ var titlescreen_logo1_x = 0;
 var titlescreen_logo2_x = 0;
 
 var titlescreen_scale = 0;
-var transition_black = 0.0;
+var transition_black = 1;
 
 var story_state = 0;
 var fuck_state = 0;
@@ -66,6 +66,8 @@ var poss_y_old = 0;
 
 var game_loaded = 0;
 var sound_total = 0;
+
+var keyboard = 0;
 
 window.onload = function() 
 {
@@ -162,6 +164,7 @@ window.onload = function()
 				break;
 			}
 			tapped = 0;
+			if (keyboard > 0) keyboard = 0;
 	    }
 	    requestAnimationFrame(mainloop);
 		window.setInterval(mainloop, precalculed_fps);
@@ -190,6 +193,15 @@ window.onload = function()
 	});
 	
 };  
+
+
+window.addEventListener("keydown", function(evt) {
+	keyboard = evt.keyCode;
+}, this);
+
+window.addEventListener("keyup", function(evt) {
+	if (keyboard > 0) keyboard = 0;
+}, this);
 
 function Init_Game_state(b)
 {
@@ -393,7 +405,7 @@ function Titlescreen()
 			background.drawImage(img_memory[10], titlescreen_logo1_x,30);
 			background.drawImage(img_memory[3], 200, titlescreen_logo2_x);
 			
-			if (touch_state == 1)
+			if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 			{
 				titlescreen_state = 4;
 			}
@@ -492,7 +504,7 @@ function Story()
 		timer_game += 1;
 	}
 		
-	if (touch_state == 1)
+	if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 	{
 		if (poss_x > 820 && poss_y < 70)
 		{
@@ -601,7 +613,7 @@ function Game_fuck()
 			switch(fuck_character)
 			{
 				case 0:
-					if (touch_state == 1)
+					if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 					{
 						Play_random_noise();
 						sound[10].play();
@@ -638,7 +650,7 @@ function Game_fuck()
 				break;
 			}
 			
-			if (touch_state == 1)
+			if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 			{
 				fuck_speed++;
 				if (fuck_speed > 100)
@@ -766,7 +778,7 @@ function Game_fuck()
 			switch(fuck_character)
 			{
 				case 0:
-					if (touch_state == 1)
+					if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 					{
 						Play_random_noise();
 						fuck_character = 1;
@@ -814,7 +826,7 @@ function Game_fuck()
 				break;
 			}
 			
-			if (touch_state == 1)
+			if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 			{
 				fuck_speed++;
 				if (fuck_speed > 100)
@@ -855,7 +867,7 @@ function GameOver()
 	
 	background.fillText("Continue ?", 405, 400);
 		
-	if (touch_state == 1)
+	if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 	{
 		Init_Game_state(2);
 		timer_game = 0;
@@ -931,7 +943,7 @@ function End()
 		timer_game += 1;
 	}
 		
-	if (touch_state == 1)
+	if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 	{
 		story_state = story_state + 1;
 		timer_game = 0;
