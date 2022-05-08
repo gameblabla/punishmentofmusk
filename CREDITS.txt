@@ -21,3 +21,7 @@ License : CC-BY 3.0
 Alexandr Zhelanov - Mystical Theme
 https://opengameart.org/content/mystical-theme
 License : CC-BY 3.0
+
+EasyRPG RTP :
+https://github.com/EasyRPG/RTP
+ Creative Commons Attribution 4.0 International License

@@ -22,6 +22,8 @@
 */
 var img_memory = Array(21);
 var precalculed_fps = 1000/30;
+var text_speed = Array(10);
+var text_reach = Array(10);
 
 var timer_game = 0;
 var timer_game2 = 0;
@@ -82,7 +84,7 @@ window.onload = function()
 	mc = new Hammer(first_layer);
 	first_layer.imageSmoothingEnabled = false;
 	
-	for (i=0;i<21;i++)
+	for (i=0;i<23;i++)
 	{
 		img_memory[i] = new Image();
 	}
@@ -100,13 +102,17 @@ window.onload = function()
 	sound[10] = new Howl({ src: ['data/fuck.webm', 'data/fuck.ogg', 'data/fuck.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;},});
 	sound[11] = new Howl({ src: ['data/fuck2.webm', 'data/fuck2.ogg', 'data/fuck2.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
 	
+	sound[12] = new Howl({ src: ['snd/text.webm', 'snd/text.ogg', 'snd/text.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[13] = new Howl({ src: ['snd/cur2.webm', 'snd/cur2.ogg', 'snd/cur2.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	sound[14] = new Howl({ src: ['snd/confirm.webm', 'snd/confirm.ogg', 'snd/confirm.mp3'], onload: function() {game_loaded++;}, onloaderror: function() {game_loaded++;}});
+	
 	img_memory[0].src = 'data/titlescreen.jpg';
 	//img_memory[1].src = 'data/time.jpg';
 	//img_memory[2].src = 'data/score.png';
 	img_memory[3].src = 'data/tap.png';
-	img_memory[4].src = 'data/orban_fucked_sheet_1.jpg';
-	img_memory[5].src = 'data/orban_fucked_sheet_2.jpg';
-	img_memory[6].src = 'data/orban_fucked_sheet_3.jpg';
+	img_memory[4].src = 'data/sprites.jpg';
+	/*img_memory[5].src = 'data/orban_fucked_sheet_2.jpg';
+	img_memory[6].src = 'data/orban_fucked_sheet_3.jpg';*/
 	//img_memory[7].src = 'data/orban_icon.png';
 	img_memory[8].src = 'data/go.png';
 	img_memory[9].src = 'data/tap.png';
@@ -124,7 +130,9 @@ window.onload = function()
 
 	img_memory[19].src = 'data/story6.jpg';
 	img_memory[20].src = 'data/story7.jpg';
-
+	img_memory[21].src = 'data/story8.jpg';
+	img_memory[22].src = 'data/story10.jpg';
+	
 	logo_y = -90;
 	titlescreen_state = 0;
 	
@@ -157,7 +165,7 @@ window.onload = function()
 					// Render blackground while still loading
 					background.drawImage(img_memory[11], 0, 0);
 					background.fillText("Downloading game assets, please wait", 10, 520);
-					if (game_loaded > 11)
+					if (game_loaded > 13)
 					{
 						Init_Game_state(0);
 					}
@@ -229,6 +237,10 @@ function Init_Game_state(b)
 			timer_game = 0;
 			timer_game2 = 0;
 			story_state = 0;
+			text_speed[0] = 0;
+			text_reach[0] = 0;
+			text_speed[1] = 0;
+			text_reach[1] = 0;
 			sound[5].play();
 		break;
 		case 2:
@@ -335,6 +347,56 @@ function Put_animated_background(a, b, c, d, e, f, scale)
 	background.drawImage(img_memory[a], 0, e*f, d, e, b, c, d * scale, e * scale);
 }
 
+function truncateString(str, num) {
+  if (str.length <= num) {
+    return str
+  }
+  return str.slice(0, num) + '...'
+}
+
+
+
+/* This is for drawing our text slowly, kind of like in the JRPGs with dialog boxes.
+ * There's a text speed variable for each line.
+ * */
+function Put_text(a, b, c, d)
+{
+	/* If we start drawing from line 1,
+	 * check to see first if drawing the preceding line has been completed.
+	 * If not, then we just ignore this function.
+	 * */
+	if (text_after_line > 0)
+	{
+		if (text_reach[text_after_line-1] == 0)
+		{
+			return;
+		}
+	}
+	
+	/*
+	 * text_speed should not exceed the string's length. 
+	*/
+	if (text_speed[text_after_line] >= a.length)
+	{
+		text_speed[text_after_line] = a.length;
+		text_reach[text_after_line] = 1;
+	}
+	else
+	{
+		text_speed[text_after_line] += 1.0;
+		sound[12+d].play();
+	}
+	
+	/* Actually truncating the string before drawing it */
+	var myTruncatedString = a.substring(0,Math.round(text_speed[text_after_line]));
+	background.fillText(myTruncatedString, b, c);
+	
+	/* Increment text_after_line global variable.
+	 * We need to make sure to actually set this to 0 before we start using Put_text in a loop. */
+	text_after_line++;
+}
+
+
 function Titlescreen()
 {
 	switch(titlescreen_state)
@@ -369,12 +431,12 @@ function Titlescreen()
 		case 1:	
 			Put_animated_background(0, 0, 0, 960, 540, animation_titlescreen, 1);
 			
-			if (timer_game < 19)
+			if (timer_game < 11)
 			{
 				timer_game += 1;
 			}
 			
-			if (timer_game > 18)
+			if (timer_game > 10)
 			{
 				timer_game2++;
 				
@@ -391,7 +453,7 @@ function Titlescreen()
 			}
 		break;
 		case 2:
-			Put_animated_background(0, 0, 0, 960, 540, 9, 1);
+			Put_animated_background(0, 0, 0, 960, 540, 0, 1);
 			background.drawImage(img_memory[10], titlescreen_logo1_x,30);
 			background.drawImage(img_memory[3], 200, titlescreen_logo2_x);
 			
@@ -401,17 +463,19 @@ function Titlescreen()
 			else titlescreen_state = 3;
 		break;
 		case 3:
-			Put_animated_background(0, 0, 0, 960, 540, 9, 1);
+			Put_animated_background(0, 0, 0, 960, 540, 0, 1);
 			background.drawImage(img_memory[10], titlescreen_logo1_x,30);
 			background.drawImage(img_memory[3], 200, titlescreen_logo2_x);
 			
 			if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 			{
+				sound[0].stop();
+				sound[14].play();
 				titlescreen_state = 4;
 			}
 		break;
 		case 4:
-			Put_animated_background(0, 0, 0, 960, 540, 9, 1);
+			Put_animated_background(0, 0, 0, 960, 540, 0, 1);
 			background.globalAlpha = transition_black;
 			Put_animated_background(11, 0, 0, 960, 540, 0, 1);
 			background.globalAlpha = 1.0;
@@ -432,72 +496,103 @@ function Titlescreen()
 
 function Story()
 {
+	text_after_line = 0;
 	background.drawImage(img_memory[11], 0, 0);
 	switch(story_state)
 	{
 		case 0:
 			background.drawImage(img_memory[12], 0, 0);
-			background.fillText("For 10 years, Viktor Orban ruled the country with complete control", 10, 480);
-			background.fillText("of the media and diverting EU money to himself and his friends.", 10, 520);
+			Put_text("Elon Musk :", 10, 480, 0);
+			Put_text("Zzzzzz....", 10, 520, 0);
 		break;
 		case 1:
-			background.drawImage(img_memory[12], 0, 0);
-			background.fillText("One day, he was bored and decided to get pictures of women.", 10, 480);
+			background.drawImage(img_memory[13], 0, 0);
+			Put_text("Uugggh... I feel kind of bored today.", 10, 480, 0);
 		break;
 		case 2:
-			background.drawImage(img_memory[13], 0, 0);
-			background.fillText("He used the spying tool Pegasus to retrieve a few pictures from", 10, 480);
-			background.fillText("journalists he spied on.", 10, 520);
+			background.drawImage(img_memory[14], 0, 0);
+			Put_text("I'm bored, i feel like buying twatter !", 10, 480, 0);
+			Put_text("...", 10, 520, 0);
 		break;
 		case 3:
-			background.drawImage(img_memory[13], 0, 0);
-			background.fillText("He was looking through the pictures, desperate to find", 10, 480);
-			background.fillText("anything he could masturbate to.", 10, 520);
+			background.drawImage(img_memory[15], 0, 0);
+			Put_text("I'll save twatter and the entire world", 10, 480, 0);
+			Put_text("from EVIL, WOKE PEOPLE !!!", 10, 520, 0);
 		break;
 		case 4:
-			background.drawImage(img_memory[14], 0, 0);
-			background.fillText("Eventually, he stumpled upon a 14 years old girl.", 10, 480);
-			background.fillText("She was the daughter of one of the journalists he spied on.", 10, 520);
+			background.drawImage(img_memory[16], 0, 0);
+			Put_text("Who cares about happens in Texas?", 10, 480, 0);
+			Put_text("I gotta return the favour to my friend Greg !", 10, 520, 0);
 		break;
 		case 5:
-			background.drawImage(img_memory[14], 0, 0);
-			background.fillText("Orban couldn't resist and he started to jack off to her.", 10, 480);
+			background.drawImage(img_memory[19], 0, 0);
+			Put_text("NPCs : WOW !!! ELON MUSK IS OUR HERO !!! ", 10, 480, 0);
+			Put_text("ANYONE WHO OPPOSES HIM IS WOKE!", 10, 520, 0);
 		break;
 		case 6:
-			background.drawImage(img_memory[15], 0, 0);
-			background.fillText("Unbeknownst to him however, his phone was also hacked in", 10, 480);
-			background.fillText("a counter-espionage operation by Anonymous.", 10, 520);
+			background.drawImage(img_memory[16], 0, 0);
+			Put_text("I know right ? No one can stop me", 10, 480, 0);
+			Put_text("and my meme investors.", 10, 520, 0);
 		break;
 		case 7:
-			background.drawImage(img_memory[15], 0, 0);
-			background.fillText("Anonymous saw what he did and warned the father", 10, 480);
-			background.fillText("about what Orban did.", 10, 520);
+			background.drawImage(img_memory[16], 0, 0);
+			Put_text("If i have to, i would even go as far", 10, 480, 0);
+			Put_text("as beating up Putin.", 10, 520, 0);
 		break;
 		case 8:
-			background.drawImage(img_memory[15], 0, 0);
-			background.fillText("The father swears to avenge her and make him pay for", 10, 480);
-			background.fillText("what he did.", 10, 520);
+			background.drawImage(img_memory[20], 0, 0);
+			Put_text("Putin : !!!", 10, 480, 1);
+			Put_text("What did you say about me ???", 10, 520, 1);
+			titlescreen_scale = 2.0;
 		break;
 		case 9:
-			background.drawImage(img_memory[16], 0, 0);
-			background.fillText("One day, he was able to sucessfully kidnap him and", 10, 480);
-			background.fillText("run away from the police.", 10, 520);
+			//background.drawImage(img_memory[21], 0, 0);
+			Put_animated_background(21, 0, 0, 960, 540, 0, titlescreen_scale);
+			if (titlescreen_scale > 1.00)
+			{
+				titlescreen_scale = titlescreen_scale - 0.05;
+			}
+			Put_text("Hmpf ! Come fight me then.", 10, 480, 1);
 		break;
 		case 10:
 			background.drawImage(img_memory[16], 0, 0);
-			background.fillText("He made a promise to himself :", 10, 480);
-			background.fillText("he will pay for Pegasus and what he did...", 10, 520);
+			Put_text("Well erm... Shit.", 10, 480, 0);
 		break;
 		case 11:
-			background.fillText("And he will fucking rape him.", 300, 240);
+			Put_text("*Bam !*", 400, 240, 0);
 		break;
 		case 12:
+			Put_text("Elon Musk : Ooof... What's going on ?", 10, 480, 0);
+		break;
+		case 13:
+			//background.drawImage(img_memory[21], 0, 0);
+			Put_animated_background(22, 0, 0, 960, 540, 0, titlescreen_scale);
+			if (titlescreen_scale > 1.00)
+			{
+				titlescreen_scale = titlescreen_scale - 0.05;
+			}
+			Put_text("Wait...", 10, 480, 0);
+			Put_text("Why do i have a vagina ?", 10, 520, 0);
+		break;
+		case 14:
+			//background.drawImage(img_memory[21], 0, 0);
+			Put_animated_background(20, 0, 0, 960, 540, 0, titlescreen_scale);
+			if (titlescreen_scale > 1.00)
+			{
+				titlescreen_scale = titlescreen_scale - 0.05;
+			}
+			Put_text("Because the Kremlin gave you one.", 10, 480, 1);
+		break;
+		case 15:
+			background.drawImage(img_memory[20], 0, 0);
+			Put_text("Time for your lesson.", 10, 480, 1);
+		break;
+		case 16:
 			Init_Game_state(2);
 		break;
 	}
 	
 	background.fillText("Skip =>", 830, 40);
-	
 			
 	if (timer_game < 10)
 	{
@@ -508,13 +603,17 @@ function Story()
 	{
 		if (poss_x > 820 && poss_y < 70)
 		{
-			story_state = 12;
+			story_state = 16;
 		}
 		else
 		{
 			story_state = story_state + 1;
 		}
 		timer_game = 0;
+		text_speed[0] = 0;
+		text_reach[0] = 0;
+		text_speed[1] = 0;
+		text_reach[1] = 0;
 	}	
 	
 	if (transition_black > 0.05)
@@ -564,7 +663,7 @@ function Game_fuck()
 					background.fillText("Tap / Click to rape", 20, 500);
 				break;
 				case 1:
-					background.fillText("Rape Orban faster!", 20, 500);
+					background.fillText("Rape Elon Musk faster!", 20, 500);
 				break;
 				case 2:
 					background.fillText("Keep Going !", 20, 500);
@@ -578,7 +677,7 @@ function Game_fuck()
 				break;
 			}
 
-			background.fillText("Fucking bar", 20, 30);
+			background.fillText("Rape life bar", 20, 30);
 			background.fillStyle = "green";
 			background.fillRect(20, 50, fuck_speed * 2, 30);
 			background.fillStyle = "white";
@@ -662,182 +761,6 @@ function Game_fuck()
 		case 2:
 			Put_animated_background(4, 0, 0, 960, 540, animation_titlescreen, 1);
 			
-			background.fillText("NEXT PHASE !", 380, 250);
-			
-			timer_game++;
-			if (timer_game > 60)
-			{
-				transition_black = 1;
-				timer_game = 0;
-				timer_game2 = 0;
-				fuck_state = 3;
-				fuck_character = 0;
-				fuck_speed = 100;
-				fuck_state_text = 0;
-				animation_titlescreen = 0;
-				fuck_required_speed = 0;
-				fuck_frames = 11;
-				animation_sprite_time_passed = 4;
-			}
-		break;
-		case 3:
-			Put_animated_background(5, 0, 0, 960, 540, 0, 1);
-			
-			background.fillText("Ready ?", 430, 250);
-			
-			if (transition_black > 0.05)
-			{
-				transition_black = transition_black - 0.05;
-				background.globalAlpha = transition_black;
-				Put_animated_background(11, 0, 0, 960, 540, 0, 1);
-				background.globalAlpha = 1.0;
-			}
-			
-			timer_game++;
-			if (timer_game > 60)
-			{
-				fuck_state = 4;
-				animation_titlescreen = 0;
-				timer_game = 0;
-				timer_game2 = 0;
-				fuck_state_text = 0;
-			}
-		break;
-		case 4:
-			switch(fuck_state_text)
-			{
-				case 0:
-					Put_animated_background(5, 0, 0, 960, 540, animation_titlescreen, 1);
-					background.fillText("Rape Orban", 20, 500);
-				break;
-				case 1:
-					Put_animated_background(5, 0, 0, 960, 540, animation_titlescreen, 1);
-					background.fillText("Rape Orban faster!", 20, 500);
-				break;
-				case 2:
-					Put_animated_background(5, 0, 0, 960, 540, animation_titlescreen, 1);
-					background.fillText("Keep Going !", 20, 500);
-				break;
-				case 3:
-					Put_animated_background(6, 0, 0, 960, 540, animation_titlescreen, 1);
-					background.fillText("CUM !", 20, 500);
-				break;
-				case 4:
-					fuck_state = 5;
-					timer_game = 0;
-					background.clearRect(0, 0, 960, 540); 
-				break;
-			}
-			
-			
-			/*Put_animated_background(7, 960 - 240, 540 - 240, 200, 200, animation_sprite, 1);
-			
-			animation_time++;
-			if (animation_time > 10 - (fuck_required_speed * 3))
-			{
-				animation_sprite++;
-				if (animation_sprite > 2)
-				{
-					animation_sprite = 0;
-				}
-				animation_time = 0;
-			}*/
-			
-			background.fillText("Fucking bar", 20, 30);
-			background.fillStyle = "green";
-			background.fillRect(20, 50, fuck_speed * 2, 30);
-			background.fillStyle = "white";
-			
-			timer_game++;
-			timer_game2++;
-			
-			if (timer_game > 10 - (fuck_required_speed * 3))
-			{
-				timer_game = 0;
-				fuck_speed = fuck_speed - 1;
-				if (fuck_speed < 1)
-				{
-					fuck_speed = 0;
-					fuck_state = 6;
-					sound[0].stop();
-					sound[5].stop();
-					sound[6].stop();
-					sound[7].stop();
-					sound[8].stop();
-					sound[9].play();
-				}
-			}
-			
-			if (timer_game2 > 200)
-			{
-				timer_game2 = 0;
-				fuck_required_speed = fuck_required_speed + 1;
-				fuck_state_text = fuck_state_text + 1;
-			}
-			
-			switch(fuck_character)
-			{
-				case 0:
-					if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
-					{
-						Play_random_noise();
-						fuck_character = 1;
-						switch(fuck_state_text)
-						{
-							case 0:
-								fuck_current_speed = 1;
-								animation_sprite_time_passed = 4;
-								sound[10].play();
-							break;
-							case 1:
-								fuck_current_speed = 2;
-								animation_sprite_time_passed = 3;
-								sound[10].play();
-							break;
-							case 2:
-								fuck_current_speed = 2;
-								animation_sprite_time_passed = 2;
-								sound[10].play();
-							break;
-							case 3:
-								fuck_current_speed = 1;
-								animation_sprite_time_passed = 1;
-								sound[11].play();
-								fuck_frames = 16;
-							break;
-						}
-					}
-				break;
-				case 1:
-					animation_titlescreen = animation_titlescreen + fuck_current_speed;
-					if (animation_titlescreen > fuck_frames)
-					{
-						animation_titlescreen = fuck_frames;
-						fuck_character = 2;
-					}
-				break;
-				case 2:
-					animation_titlescreen = animation_titlescreen - fuck_current_speed;
-					if (animation_titlescreen < 1)
-					{
-						animation_titlescreen = 0;
-						fuck_character = 0;
-					}
-				break;
-			}
-			
-			if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
-			{
-				fuck_speed++;
-				if (fuck_speed > 100)
-				{
-					fuck_speed = 100;
-				}
-			}
-		break;
-		case 5:
-			Put_animated_background(6, 0, 0, 960, 540, animation_titlescreen, 1);
-			
 			background.fillText("SUCCESS !", 380, 250);
 			
 			timer_game++;
@@ -863,9 +786,10 @@ function GameOver()
 	background.drawImage(img_memory[11], 0, 0);
 	background.drawImage(img_memory[8], 344, 50);
 	
-	background.fillText("He broke free and killed you.", 290, 240);
-	
-	background.fillText("Continue ?", 405, 400);
+	background.fillText("Elon broke free and killed you.", 290, 240);
+	background.fillText("Starlink was a success in Ukraine", 262, 280);
+	background.fillText("and killed all of the russians there.", 260, 320);
+	background.fillText("Continue ?", 405, 440);
 		
 	if (touch_state == 1 || (keyboard == 13 || keyboard == 17 || keyboard == 32))
 	{
@@ -886,53 +810,78 @@ function GameOver()
 function End()
 {
 	background.drawImage(img_memory[11], 0, 0);
+	text_after_line = 0;
 	switch(story_state)
 	{
 		case 0:
 			background.drawImage(img_memory[18], 0, 0);
-			background.fillText("Finally, Viktor Orban got the punishment he", 10, 480);
-			background.fillText("deserved.", 10, 520);
+			Put_text("Elon Musk is bleeding due to being raped way", 10, 480, 0);
+			Put_text("too hard by Vlad Putin.", 10, 520, 0);
 		break;
 		case 1:
-			background.drawImage(img_memory[18], 0, 0);
-			background.fillText("He got fucked for so long, his asshole is bleeding", 10, 480);
-			background.fillText("to death.", 10, 520);
+			background.drawImage(img_memory[19], 0, 0);
+			Put_text("Elon Musk Simps : What did you do to him ?", 10, 480, 0);
+			Put_text("He was our saviour against WOKE PEOPLE!", 10, 520, 0);
 		break;
 		case 2:
-			background.drawImage(img_memory[19], 0, 0);
-			background.fillText("He was sent to an hospital due to his severe injuries.", 10, 480);
-			background.fillText("But the doctors say he is unlikely to survive.", 10, 520);
+			background.drawImage(img_memory[20], 0, 0);
+			Put_text("Putin : I regret to inform you but Elon Musk", 10, 480, 1);
+			Put_text("is now transgender.", 10, 520, 1);
 		break;
 		case 3:
 			background.drawImage(img_memory[19], 0, 0);
-			background.fillText("Orban fell into coma 3 days later and the doctors", 10, 480);
-			background.fillText("were, so far, unable to resuscitate him.", 10, 520);
+			Put_text("Elon Musk Simps : LIES !!! You killed him", 10, 480, 0);
+			Put_text("because you WORSHIP BLACK PEOPLE !!!", 10, 520, 0);
 		break;
 		case 4:
 			background.drawImage(img_memory[20], 0, 0);
-			background.fillText("Finally, you can rest in peace knowing he got", 10, 480);
-			background.fillText("just what he was deserved.", 10, 520);
+			Put_text("Putin : You should take a closer look", 10, 480, 1);
+			Put_text("at a photo we took of him then.", 10, 520, 1);
 		break;
 		case 5:
-			background.drawImage(img_memory[20], 0, 0);
-			background.fillText("Your daughter has been avenged and", 10, 480);
-			background.fillText("Israel stopped their contracts with Hungary.", 10, 520);
+			background.drawImage(img_memory[22], 0, 0);
+			Put_text("... See ?", 10, 480, 1);
+			Put_text("Elon Musk has a vagina.", 10, 520, 1);
 		break;
 		case 6:
-			background.drawImage(img_memory[20], 0, 0);
-			background.fillText("But you have the feeling that he may recover from", 10, 480);
-			background.fillText("his injuries after all...", 10, 520);
+			background.drawImage(img_memory[19], 0, 0);
+			Put_text("Elon Musk Simps : ....", 10, 480, 0);
+			Put_text("..............", 10, 520, 0);
 		break;
 		case 7:
-			background.drawImage(img_memory[20], 0, 0);
-			background.fillText("And despite this, the Fidesz party is still around", 10, 480);
-			background.fillText("willingly spying on their own citizens.", 10, 520);
+			background.drawImage(img_memory[19], 0, 0);
+			Put_text("Elon Musk Simps : Elon Musk LIED to US.", 10, 480, 0);
+			Put_text("..............", 10, 520, 0);
 		break;
 		case 8:
-			background.drawImage(img_memory[20], 0, 0);
-			background.fillText("The end ?", 10, 480);
+			background.drawImage(img_memory[19], 0, 0);
+			Put_text("Elon Musk Simps : Elon Musk is not our.", 10, 480, 0);
+			Put_text("HERO.", 10, 520, 0);
 		break;
 		case 9:
+			background.drawImage(img_memory[19], 0, 0);
+			Put_text("Elon Musk is #NotOurMan !", 10, 480, 0);
+		break;
+		case 10:
+			background.drawImage(img_memory[19], 0, 0);
+			Put_text("Former Simps : Come on guises, let's retreat", 10, 480, 0);
+			Put_text("back to our mancaves and eat more junk.", 10, 520, 0);
+		break;
+		case 11:
+			background.drawImage(img_memory[20], 0, 0);
+			Put_text("Putin : ....", 10, 480, 1);
+		break;
+		case 12:
+			Put_text("In the end, not only Elon Musk lost his asshole", 10, 200, 0);
+			Put_text("to Putin, but also lost his worshippers.", 10, 240, 0);
+			Put_text("Bitch ass cried all day because Musk was no longer the", 10, 320, 0);
+			Put_text("spotlight of this world and everyone died of type 2 diabetes", 10, 360, 0);
+			Put_text("before they could go on Mars.", 10, 400, 0);
+		break;
+		case 13:
+			Put_text("The end", 10, 440, 0);
+		break;
+		case 14:
 			Init_Game_state(0);
 		break;
 	}
@@ -947,6 +896,12 @@ function End()
 	{
 		story_state = story_state + 1;
 		timer_game = 0;
+		timer_game = 0;
+		for (let i = 0; i < text_speed.length; i++) 
+		{
+		  	text_speed[i] = 0;
+			text_reach[i] = 0;
+		}
 	}	
 	
 	if (transition_black > 0.05)

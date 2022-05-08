@@ -1,7 +1,9 @@
-The Rape of Orbán
-=================
+The Rape of Elon Musk
+======================
 
-A short little HTML5 Javascript game that i did in 2 days after the Pegasus revelation and the anti LGBT amendments.
+This is based on another game i made, the Rape of Viktor Orban.
+The only major difference is the text that goes slowly and added sound effects.
+
 
 The game uses an internal resolution of 960x540 (improved from 480x320 like most of my older HTML5 games) and shares some code
 with my Rubby Bird 100 game. (it was used as a template as i wanted to be as fast as possible)
